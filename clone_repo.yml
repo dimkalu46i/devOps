@@ -1,0 +1,15 @@
+---
+- name: Clone Django Local Library Tutorial
+  hosts: app
+  become: yes
+  tasks:
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone repository
+      git: # Модуль для работы с Гитом
+        repo: https://github.com/mdn/django-locallibrary-tutorial
+        dest: /home/vagrant/django-locallibrary-tutorial # Указание пути для установки
+        update: yes # Нужно обновить список пакетов после добавления репозитория

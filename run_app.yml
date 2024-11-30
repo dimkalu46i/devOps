@@ -1,0 +1,28 @@
+---
+- name: Run Django application
+  hosts: app
+  become: yes
+  tasks:
+    - name: Install Python and pip
+      apt:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Install Django
+      pip:
+        name: django
+
+    - name: Run Django migrations
+      # Модуль для выполнения команды. Выполнение миграции базы данных для Django-приложения
+      command: python3 /home/vagrant/django-locallibrary-tutorial/manage.py migrate
+      args:
+        chdir: /home/vagrant/django-locallibrary-tutorial
+
+    - name: Start Django server
+      command: python3 /home/vagrant/django-locallibrary-tutorial/manage.py runserver 0.0.0.0:8000
+      args:
+        chdir: /home/vagrant/django-locallibrary-tutorial
+      async: 10 # Задача может выполняться асинхронно и может занять до 10 секунд
+      poll: 0 # Ansible не будет ждать завершения задачи, а продолжит выполнение следующих задач

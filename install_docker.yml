@@ -1,0 +1,35 @@
+---
+- name: Install Docker
+  hosts: app
+  become: yes # Указывает, что задачи будут выполняться с повышенными привилегиями `sudo`
+  tasks:
+    - name: Install required packages
+      apt: # Секция с указаниями пакетов для установки
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present # Указывает, что пакеты должны быть установлены
+
+    - name: Add Docker GPG key
+      apt_key: # Модуль для управления GPG-ключами
+        url: https://download.docker.com/linux/ubuntu/gpg # Откуда будет загружен GPG-ключ
+        state: present # Ключ должен быть добавлен
+
+    - name: Add Docker APT repository
+      apt_repository: # Модуль для управления APT-репозиториями
+        # deb: бинарный репо; [arch-amd64]: репо для нужной архитектуры; url-адрес репо; focal: кодовое имя Ubuntu; stable: ветка репозитория
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present # Репозиторий должен быть добавлен
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Start Docker service
+      service: # Модуль для управления службами
+        name: docker
+        state: started # Указывает, что служба должна быть установлена
+        enabled: yes # Служба должна быть включена для автоматического запуска при загрузке системы
