@@ -1,0 +1,26 @@
+---
+- name: Install required packages
+  apt:
+    name: "{{ docker_packages }}"
+    state: present
+
+- name: Add Docker GPG key
+  apt_key:
+    url: "{{ docker_gpg_key_url }}"
+    state: present
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: "{{ docker_repository }}"
+    state: present
+
+- name: Install Docker
+  apt:
+    name: "{{ docker_package }}"
+    state: present
+
+- name: Start Docker service
+  service:
+    name: "{{ docker_service }}"
+    state: started
+    enabled: yes
