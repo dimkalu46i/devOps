@@ -1,0 +1,32 @@
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: true
+
+- name: Ensure Nginx is started and enabled
+  service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Template Nginx configuration for default site
+  template:
+    src: "{{ playbook_dir }}/../inventories/templates/default.conf.j2"
+    dest: "{{ nginx_sites_available }}/default"
+  vars:
+    django_static_location: "/static/"
+    django_server: "{{ hostvars[inventory_hostname].django_server }}"
+
+- name: Template Nginx configuration
+  template:
+    src: "{{ playbook_dir }}/../inventories/templates/nginx.conf.j2"
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+    validate: /usr/sbin/nginx -t -c %s
+    backup: yes
+  notify:
+    - Restart Nginx

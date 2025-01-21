@@ -1,0 +1,12 @@
+required_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+  - python3-pip
+  - virtualenv
+  - python3-setuptools
+
+docker_apt_key: https://download.docker.com/linux/ubuntu/gpg
+docker_repository: deb https://download.docker.com/linux/ubuntu focal stable
+docker_module: docker
