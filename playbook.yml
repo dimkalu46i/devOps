@@ -1,0 +1,14 @@
+---
+- hosts: app
+  become: true
+  roles:
+    - docker
+  vars_files:
+    - "/home/dimkalu46i/devOps_lab3/group_variables/docker.yml"
+
+- hosts: web
+  become: true
+  roles:
+    - nginx
+  vars_files:
+    - "/home/dimkalu46i/devOps_lab3/group_variables/nginx.yml"

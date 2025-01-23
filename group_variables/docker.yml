@@ -1,0 +1,67 @@
+---
+docker_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+  - python3-pip
+  - virtualenv
+  - python3-setuptools
+
+docker_apt_key: "https://download.docker.com/linux/ubuntu/gpg"
+docker_repo: "deb https://download.docker.com/linux/ubuntu focal stable"
+docker_python_module: "docker"
+
+default_container_name: docker
+default_container_image: python:3.12
+default_container_command: |
+  bash -c "cd /home/vagrant/django-locallibrary-tutorial && \
+  pip install -r requirements.txt && \
+  sed -i \"s/ALLOWED_HOSTS = \\[.*\\]/ALLOWED_HOSTS = ['*']/\" locallibrary/settings.py && \
+  python3 manage.py makemigrations && \
+  python3 manage.py migrate && \
+  python3 manage.py runserver 0.0.0.0:8000"
+django_repo: https://github.com/mdn/django-locallibrary-tutorial
+django_app_dir: /home/vagrant/django-locallibrary-tutorial
+
+tasks:
+    - name: Install specific version of requests
+      pip:
+        name: requests==2.31.0
+        state: present
+
+    - name: Install git
+      apt:
+        name: git
+        state: latest
+        update_cache: true
+
+    - name: Clone the Django repository
+      git:
+        repo: "{{ django_repo }}"
+        dest: "{{ django_app_dir }}"
+        clone: yes
+        update: yes
+
+    - name: Run the Django app in a Docker container
+      docker_container:
+        name: locallibrary_app
+        image: "{{ default_container_image }}"
+        state: started
+        restart_policy: always
+        command: "{{ default_container_command }}"
+        volumes:
+          - "{{ django_app_dir }}:{{ django_app_dir }}"
+        exposed_ports:
+          - "8000"
+        published_ports:
+          - "8000:8000"
+        container_default_behavior: compatibility
+
+    - name: List running containers
+      command: docker ps
+      register: docker_ps_output
+
+    - name: Show running containers
+      debug:
+        var: docker_ps_output.stdout

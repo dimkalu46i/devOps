@@ -1,0 +1,11 @@
+---
+nginx_sites_enabled: "/etc/nginx/sites-enabled"
+nginx_sites_available: "/etc/nginx/sites-available"
+django_static_location: "/static/"
+nginx_server_name: "localhost"
+nginx_user: "www-data"
+nginx_worker_processes: "auto"
+nginx_worker_connections: 768
+nginx_keepalive_timeout: 65
+nginx_access_log: "/var/log/nginx/access.log"
+nginx_error_log: "/var/log/nginx/error.log"
