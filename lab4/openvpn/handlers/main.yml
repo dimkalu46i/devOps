@@ -1,0 +1,5 @@
+---
+- name: перезагрузка VPN сервиса
+  systemd:
+    name: openvpn-server@server
+    state: reload
