@@ -1,0 +1,8 @@
+---
+- name: Set up openVPN server
+  hosts: vpn
+  become: true
+  roles:
+    - galaxy_openvpn.openvpn
+  vars_files:
+    - "/root/devOps/lab4/vpn.yml"

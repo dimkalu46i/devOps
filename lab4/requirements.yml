@@ -1,0 +1,5 @@
+---
+roles:
+  - name: openvpn
+    src: git+https://gitlab.com/ansible-roles315502/docker-role.git
+    version: master
