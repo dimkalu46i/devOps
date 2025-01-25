@@ -1,0 +1,18 @@
+---
+- hosts: db
+  become: yes
+  roles:
+    - role: itmo.postgresql
+      tags: db
+
+- hosts: master
+  become: yes
+  roles:
+    - role: itmo.postgresql
+      tags: master
+
+- hosts: replica
+  become: yes
+  roles:
+    - role: itmo.postgresql
+      tags: replica
