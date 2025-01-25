@@ -1,0 +1,8 @@
+- name: перезапуск PostgreSQL service
+  shell: |
+    pg_ctlcluster {{ postgresql_version }} main reload
+  args:
+    executable: /bin/bash
+  register: reload_result
+  changed_when: "'server starting' in reload_result.stdout or 'reloaded' in reload_result.stdout"
+  failed_when: reload_result.rc != 0 and 'stopped' not in reload_result.stdout
