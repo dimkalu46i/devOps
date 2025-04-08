@@ -1,0 +1,19 @@
+
+ docker ps -a
+ 1816  docker build -t mynginx .
+ 1817  docker images
+ 1818  docker run -d -p 8080:80 --name mynginx -v ~/Documents/ITMO/devOps/static:/var/www/html:ro mynginx 
+ 1819  docker ps -A
+ 1820  docker ps -a
+ 1821  docker-compose up --build -d
+ 1822  docker ps -a
+ 1823  docker stop c937a1f55237
+ 1824  docker rm  c937a1f55237
+ 1825  docker-compose up --build -d
+ 1826  docker ps -a
+ 1827  ls -l ~/Documents/ITMO/devOps/static
+ 1828  chmod -R 755 ~/Documents/ITMO/devOps/static
+ 1829  docker ps -a
+ 1830  docker stop da391ca1c501
+ 1831  docker rm da391ca1c501
+ 1832  docker-compose up --build -d
